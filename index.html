@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Sistema AR con Grupos de Imágenes - Responsive</title>
+    <title>Sistema AR con Posiciones Permanentes - Responsive</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
@@ -129,6 +129,53 @@
                 el.appendChild(snowCap);
             }
         });
+
+        // Componente para gestionar el anclaje de la escena en el mundo
+        AFRAME.registerComponent('world-anchor', {
+            schema: {
+                enabled: {default: true}
+            },
+
+            init: function() {
+                this.worldPosition = new THREE.Vector3();
+                this.worldQuaternion = new THREE.Quaternion();
+                this.worldScale = new THREE.Vector3();
+                this.anchored = false;
+                this.content = this.el.querySelector('.content-container');
+                this.marker = document.getElementById('miMarcador');
+                
+                // Escuchar cuándo se detecta el marcador por primera vez
+                this.marker.addEventListener('markerFound', this.onMarkerFound.bind(this));
+            },
+
+            onMarkerFound: function() {
+                if (!this.anchored && this.data.enabled) {
+                    // Guardar posición mundial actual
+                    this.content.object3D.getWorldPosition(this.worldPosition);
+                    this.content.object3D.getWorldQuaternion(this.worldQuaternion);
+                    this.content.object3D.getWorldScale(this.worldScale);
+                    
+                    // Mover todo el contenido como hijo directo de la escena
+                    const scene = document.querySelector('a-scene');
+                    scene.appendChild(this.content);
+                    
+                    // Restaurar posición, rotación y escala mundiales
+                    this.content.object3D.position.copy(this.worldPosition);
+                    this.content.object3D.quaternion.copy(this.worldQuaternion);
+                    this.content.object3D.scale.copy(this.worldScale);
+                    
+                    // Marcar como anclado
+                    this.anchored = true;
+                    
+                    // Cambiar el texto del indicador de estado
+                    const statusIndicator = document.getElementById('statusIndicator');
+                    statusIndicator.textContent = 'Escena anclada - Puedes moverte libremente';
+                    
+                    // Ocultar el marcador ya que no lo necesitamos más
+                    this.marker.setAttribute('visible', 'false');
+                }
+            }
+        });
     </script>
     <style>
         body {
@@ -183,6 +230,20 @@
             text-align: center;
         }
 
+        .reset-button {
+            position: fixed;
+            top: 2vh;
+            right: 2vw;
+            background: rgba(255, 59, 48, 0.7);
+            color: white;
+            border: 2px solid white;
+            padding: 1vh 2vw;
+            font-size: clamp(12px, 3.5vw, 16px);
+            border-radius: 5px;
+            z-index: 999;
+            cursor: pointer;
+        }
+
         /* Media queries para diferentes dispositivos */
         @media (max-width: 480px) {
             .scene-button {
@@ -213,6 +274,9 @@
 <body>
     <!-- Indicador de estado -->
     <div id="statusIndicator" class="status-indicator">Buscando marcador...</div>
+    
+    <!-- Botón para reiniciar anclaje -->
+    <button id="resetButton" class="reset-button">Reiniciar</button>
 
     <!-- Botones para cambiar grupos de imágenes -->
     <div class="button-container">
@@ -234,14 +298,14 @@
             <img id="img6" src="99087599.700x525.jpg" alt="Imagen 6">
         </a-assets>
 
-        <!-- Un solo marcador con grupos de imágenes -->
-        <a-marker id="miMarcador" type="pattern" url="zona1.patt" raycaster="objects: .clickable" emitevents="true">
-            <a-entity>
+        <!-- Un solo marcador con componente world-anchor -->
+        <a-marker id="miMarcador" type="pattern" url="zona1.patt" raycaster="objects: .clickable" emitevents="true" world-anchor="enabled: true">
+            <!-- Contenedor de todo el contenido que será anclado -->
+            <a-entity class="content-container">
                 <!-- Suelo -->
                 <a-plane position="0 -2 0" rotation="-90 0 0" width="75" height="75" color="#fff"
                     material="roughness: 0.9; opacity: 0.5; transparent: true">
                 </a-plane>
-
 
                 <!-- Montañas -->
                 <a-entity position="-8 -2 -10">
@@ -271,45 +335,43 @@
 
                 <!-- Nieve dispersa por toda la escena -->
                 <a-entity position="0 0 0" snow="count: 1000; rangeX: 80; rangeZ: 80; height: 50; speed: 3"></a-entity>
+
+                <!-- Grupo 1: 2 Imágenes -->
+                <a-entity id="grupo1" visible="true">
+                    <!-- Imagen 1-1 -->
+                    <a-plane position="-1 0 0" rotation="-90 0 0" width="1.8" height="1.8"
+                        material="src: #img1; transparent: true; opacity: 1"></a-plane>
+
+                    <!-- Imagen 1-2 -->
+                    <a-plane position="1 0 0" rotation="-90 0 0" width="1.8" height="1.8"
+                        material="src: #img2; transparent: true; opacity: 1"></a-plane>
+                </a-entity>
+
+                <!-- Grupo 2: 4 Imágenes -->
+                <a-entity id="grupo2" visible="false">
+                    <!-- Imagen 2-1 -->
+                    <a-plane position="-1 0 -1" rotation="-90 0 0" width="1.5" height="1.5"
+                        material="src: #img3; transparent: true; opacity: 1"></a-plane>
+
+                    <!-- Imagen 2-2 -->
+                    <a-plane position="1 0 -1" rotation="-90 0 0" width="1.5" height="1.5"
+                        material="src: #img4; transparent: true; opacity: 1"></a-plane>
+
+                    <!-- Imagen 2-3 -->
+                    <a-plane position="-1 0 1" rotation="-90 0 0" width="1.5" height="1.5"
+                        material="src: #img5; transparent: true; opacity: 1"></a-plane>
+
+                    <!-- Imagen 2-4 -->
+                    <a-plane position="1 0 1" rotation="-90 0 0" width="1.5" height="1.5"
+                        material="src: #img6; transparent: true; opacity: 1"></a-plane>
+                </a-entity>
             </a-entity>
-            <!-- Grupo 1: 2 Imágenes -->
-            <a-entity id="grupo1" visible="true">
-                <!-- Imagen 1-1 -->
-                <a-plane position="-1 0 0" rotation="-90 0 0" width="1.8" height="1.8"
-                    material="src: #img1; transparent: true; opacity: 1"></a-plane>
-
-                <!-- Imagen 1-2 -->
-                <a-plane position="1 0 0" rotation="-90 0 0" width="1.8" height="1.8"
-                    material="src: #img2; transparent: true; opacity: 1"></a-plane>
-            </a-entity>
-
-            <!-- Grupo 2: 4 Imágenes -->
-            <a-entity id="grupo2" visible="false">
-                <!-- Imagen 2-1 -->
-                <a-plane position="-1 0 -1" rotation="-90 0 0" width="1.5" height="1.5"
-                    material="src: #img3; transparent: true; opacity: 1"></a-plane>
-
-                <!-- Imagen 2-2 -->
-                <a-plane position="1 0 -1" rotation="-90 0 0" width="1.5" height="1.5"
-                    material="src: #img4; transparent: true; opacity: 1"></a-plane>
-
-                <!-- Imagen 2-3 -->
-                <a-plane position="-1 0 1" rotation="-90 0 0" width="1.5" height="1.5"
-                    material="src: #img5; transparent: true; opacity: 1"></a-plane>
-
-                <!-- Imagen 2-4 -->
-                <a-plane position="1 0 1" rotation="-90 0 0" width="1.5" height="1.5"
-                    material="src: #img6; transparent: true; opacity: 1"></a-plane>
-            </a-entity>
-
         </a-marker>
-
-
 
         <!-- Cámara con cursor -->
         <a-entity camera></a-entity>
         <!-- Iluminación -->
-        <!-- <a-light type="ambient" color="#BBB"></a-light> -->
+        <a-light type="ambient" color="#BBB"></a-light>
         <a-light type="directional" color="#FFF" intensity="0.8" position="-1 1 1"></a-light>
     </a-scene>
 
@@ -317,6 +379,7 @@
         // Referencias a elementos DOM
         const statusIndicator = document.getElementById('statusIndicator');
         const marker = document.getElementById('miMarcador');
+        const resetButton = document.getElementById('resetButton');
         const grupo1Button = document.getElementById('grupo1Button');
         const grupo2Button = document.getElementById('grupo2Button');
         const grupo1 = document.getElementById('grupo1');
@@ -329,6 +392,7 @@
         ];
 
         let grupoActualIndex = 0;
+        let escenaAnclada = false;
 
         // Función para cambiar entre grupos
         function cambiarAGrupo(index) {
@@ -343,18 +407,37 @@
             grupos[grupoActualIndex].element.setAttribute('visible', 'true');
             grupos[grupoActualIndex].button.classList.add('active-button');
 
-            // Actualizar el indicador
-            statusIndicator.textContent = `Mostrando: ${grupos[grupoActualIndex].nombre}`;
+            // Actualizar el indicador si no está anclado
+            if (!escenaAnclada) {
+                statusIndicator.textContent = `Mostrando: ${grupos[grupoActualIndex].nombre}`;
+            } else {
+                statusIndicator.textContent = `Escena anclada - ${grupos[grupoActualIndex].nombre}`;
+            }
         }
 
         // Detectar cuando se encuentra el marcador
         marker.addEventListener('markerFound', () => {
-            statusIndicator.textContent = `Marcador detectado - ${grupos[grupoActualIndex].nombre}`;
+            if (!escenaAnclada) {
+                statusIndicator.textContent = `Marcador detectado - ${grupos[grupoActualIndex].nombre}`;
+                
+                // Establecer un temporizador para anclaje (dar tiempo a posicionar bien)
+                setTimeout(() => {
+                    escenaAnclada = true;
+                    statusIndicator.textContent = `Escena anclada - Puedes moverte libremente`;
+                }, 2000); // 2 segundos
+            }
         });
 
-        // Detectar cuando se pierde el marcador
+        // Detectar cuando se pierde el marcador (solo relevante antes del anclaje)
         marker.addEventListener('markerLost', () => {
-            statusIndicator.textContent = `Buscando marcador... (${grupos[grupoActualIndex].nombre})`;
+            if (!escenaAnclada) {
+                statusIndicator.textContent = `Buscando marcador... (${grupos[grupoActualIndex].nombre})`;
+            }
+        });
+
+        // Función para reiniciar el anclaje
+        resetButton.addEventListener('click', () => {
+            location.reload(); // La forma más sencilla: recargar la página
         });
 
         // Asignar eventos a los botones
