@@ -227,6 +227,33 @@
         
         <!-- Un solo marcador con grupos de imágenes -->
         <a-marker id="miMarcador" type="pattern" url="zona1.patt" raycaster="objects: .clickable" emitevents="true">
+
+                    <!-- Suelo -->
+    <a-plane position="0 -2 0" rotation="-90 0 0" width="75" height="75" color="#fff" material="roughness: 0.9"></a-plane>
+    
+    <!-- Montañas -->
+    <a-entity position="-8 -2 -10">
+      <a-cone color="#fff" height="6" radius-bottom="3" radius-top="0" segments-radial="8" snow-cap="radius: 3; height: 6"></a-cone>
+    </a-entity>
+    
+    <a-entity position="-4 -2 -15">
+      <a-cone color="#fff" height="8" radius-bottom="4" radius-top="0" segments-radial="8" snow-cap="radius: 4; height: 8"></a-cone>
+    </a-entity>
+    
+    <a-entity position="3 -2 -18">
+      <a-cone color="#fff" height="10" radius-bottom="5" radius-top="0" segments-radial="8" snow-cap="radius: 5; height: 10"></a-cone>
+    </a-entity>
+    
+    <a-entity position="9 -2 -12">
+      <a-cone color="#fff" height="7" radius-bottom="3.5" radius-top="0" segments-radial="8" snow-cap="radius: 3.5; height: 7"></a-cone>
+    </a-entity>
+    
+    <a-entity position="-1 -2 -20">
+      <a-cone color="#fff" height="9" radius-bottom="4.5" radius-top="0" segments-radial="8" snow-cap="radius: 4.5; height: 9"></a-cone>
+    </a-entity>
+    
+    <!-- Nieve dispersa por toda la escena -->
+    <a-entity position="0 0 0" snow="count: 1000; rangeX: 80; rangeZ: 80; height: 50; speed: 3"></a-entity>
             
             <!-- Grupo 1: 2 Imágenes -->
             <a-entity id="grupo1" visible="true">
@@ -254,32 +281,7 @@
             
         </a-marker>
 
-        <!-- Suelo -->
-    <a-plane position="0 -2 0" rotation="-90 0 0" width="75" height="75" color="#fff" material="roughness: 0.9"></a-plane>
-    
-    <!-- Montañas -->
-    <a-entity position="-8 -2 -10">
-      <a-cone color="#fff" height="6" radius-bottom="3" radius-top="0" segments-radial="8" snow-cap="radius: 3; height: 6"></a-cone>
-    </a-entity>
-    
-    <a-entity position="-4 -2 -15">
-      <a-cone color="#fff" height="8" radius-bottom="4" radius-top="0" segments-radial="8" snow-cap="radius: 4; height: 8"></a-cone>
-    </a-entity>
-    
-    <a-entity position="3 -2 -18">
-      <a-cone color="#fff" height="10" radius-bottom="5" radius-top="0" segments-radial="8" snow-cap="radius: 5; height: 10"></a-cone>
-    </a-entity>
-    
-    <a-entity position="9 -2 -12">
-      <a-cone color="#fff" height="7" radius-bottom="3.5" radius-top="0" segments-radial="8" snow-cap="radius: 3.5; height: 7"></a-cone>
-    </a-entity>
-    
-    <a-entity position="-1 -2 -20">
-      <a-cone color="#fff" height="9" radius-bottom="4.5" radius-top="0" segments-radial="8" snow-cap="radius: 4.5; height: 9"></a-cone>
-    </a-entity>
-    
-    <!-- Nieve dispersa por toda la escena -->
-    <a-entity position="0 0 0" snow="count: 1000; rangeX: 80; rangeZ: 80; height: 50; speed: 3"></a-entity>
+
 
     <!-- Cámara con cursor -->
     <a-entity camera></a-entity>
