@@ -227,9 +227,17 @@
         
         <!-- Un solo marcador con grupos de imágenes -->
         <a-marker id="miMarcador" type="pattern" url="zona1.patt" raycaster="objects: .clickable" emitevents="true">
-
+<a-entity scale="0.5 0.5 0.5">
                     <!-- Suelo -->
-    <a-plane position="0 -2 0" rotation="-90 0 0" width="75" height="75" color="#fff" material="roughness: 0.9"></a-plane>
+    <a-plane 
+  position="0 -2 0" 
+  rotation="-90 0 0" 
+  width="75" 
+  height="75" 
+  color="#fff" 
+  material="roughness: 0.9; opacity: 0.5; transparent: true">
+</a-plane>
+
     
     <!-- Montañas -->
     <a-entity position="-8 -2 -10">
@@ -254,7 +262,7 @@
     
     <!-- Nieve dispersa por toda la escena -->
     <a-entity position="0 0 0" snow="count: 1000; rangeX: 80; rangeZ: 80; height: 50; speed: 3"></a-entity>
-            
+            </a-entity>
             <!-- Grupo 1: 2 Imágenes -->
             <a-entity id="grupo1" visible="true">
                 <!-- Imagen 1-1 -->
