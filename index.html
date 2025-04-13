@@ -6,6 +6,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script>
+    // Componente para la nieve que cae de manera dispersa
+    AFRAME.registerComponent('snow', {
+      schema: {
+        count: {default: 500},
+        rangeX: {default: 60},
+        rangeZ: {default: 60}, 
+        height: {default: 25},
+        speed: {default: 2}
+      },
+      
+      init: function() {
+        const data = this.data;
+        const el = this.el;
+        
+        // Crear múltiples generadores de nieve para dispersarla
+        for (let j = 0; j < 5; j++) {
+          const offsetX = (Math.random() * 30) - 15;
+          const offsetZ = (Math.random() * 30) - 15;
+          
+          for (let i = 0; i < data.count / 5; i++) {
+            const snowflake = document.createElement('a-entity');
+            
+            // Posición aleatoria con dispersión
+            const x = (Math.random() * data.rangeX) - (data.rangeX / 2) + offsetX;
+            const y = (Math.random() * data.height);
+            const z = (Math.random() * data.rangeZ) - (data.rangeZ / 2) + offsetZ;
+            
+            // Tamaño variable para los copos
+            const size = Math.random() * 0.15 + 0.03;
+            
+            snowflake.setAttribute('geometry', {
+              primitive: 'sphere',
+              radius: size
+            });
+            
+            // Opacidad variable para dar sensación de profundidad
+            snowflake.setAttribute('material', {
+              color: 'white',
+              shader: 'flat',
+              transparent: true,
+              opacity: Math.random() * 0.7 + 0.3
+            });
+            
+            snowflake.setAttribute('position', {x: x, y: y, z: z});
+            
+            // Movimiento lateral aleatorio además de caída
+            const driftX = (Math.random() * 2 - 1) * 3;
+            const driftZ = (Math.random() * 2 - 1) * 3;
+            const startY = y;
+            const finalY = -2;
+            
+            // Velocidad variable para cada copo
+            const speed = (Math.random() * 0.5 + 0.5) * data.speed;
+            const duration = (15000 / speed) + (Math.random() * 5000);
+            
+            // Agregar ligero movimiento zigzag
+            snowflake.setAttribute('animation__fall', {
+              property: 'position',
+              from: `${x} ${startY} ${z}`,
+              to: `${x + driftX} ${finalY} ${z + driftZ}`,
+              dur: duration,
+              easing: 'linear',
+              loop: true
+            });
+            
+            // Rotación suave para más realismo
+            snowflake.setAttribute('animation__rotate', {
+              property: 'rotation',
+              from: '0 0 0',
+              to: `${Math.random() * 360} ${Math.random() * 360} ${Math.random() * 360}`,
+              dur: Math.random() * 10000 + 10000,
+              easing: 'linear',
+              loop: true
+            });
+            
+            el.appendChild(snowflake);
+          }
+        }
+      }
+    });
+    
+    // Componente para crear nieve en la cima de las montañas
+    AFRAME.registerComponent('snow-cap', {
+      schema: {
+        radius: {default: 1},
+        height: {default: 2}
+      },
+      
+      init: function() {
+        const data = this.data;
+        const el = this.el;
+        
+        // Obtener posición del cono (montaña)
+        const position = el.getAttribute('position');
+        const height = data.height;
+        
+        // Crear el casquete de nieve
+        const snowCap = document.createElement('a-entity');
+        snowCap.setAttribute('geometry', {
+          primitive: 'cone',
+          radiusBottom: data.radius * 0.75,
+          radiusTop: 0,
+          height: height * 0.6
+        });
+        
+        snowCap.setAttribute('material', {
+          color: 'gray',
+          shader: 'standard',
+          roughness: 0.8
+        });
+        
+        // Posicionar el casquete de nieve en la cima
+        snowCap.setAttribute('position', {
+          x: 0,
+          y: height * 0.15,
+          z: 0
+        });
+        
+        el.appendChild(snowCap);
+      }
+    });
+  </script>
     <style>
         body {
             margin: 0;
