@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Sistema AR con Grupos de Imágenes - Responsive</title>
@@ -7,128 +8,128 @@
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <script>
-    // Componente para la nieve que cae de manera dispersa
-    AFRAME.registerComponent('snow', {
-      schema: {
-        count: {default: 500},
-        rangeX: {default: 60},
-        rangeZ: {default: 60}, 
-        height: {default: 25},
-        speed: {default: 2}
-      },
-      
-      init: function() {
-        const data = this.data;
-        const el = this.el;
-        
-        // Crear múltiples generadores de nieve para dispersarla
-        for (let j = 0; j < 5; j++) {
-          const offsetX = (Math.random() * 30) - 15;
-          const offsetZ = (Math.random() * 30) - 15;
-          
-          for (let i = 0; i < data.count / 5; i++) {
-            const snowflake = document.createElement('a-entity');
-            
-            // Posición aleatoria con dispersión
-            const x = (Math.random() * data.rangeX) - (data.rangeX / 2) + offsetX;
-            const y = (Math.random() * data.height);
-            const z = (Math.random() * data.rangeZ) - (data.rangeZ / 2) + offsetZ;
-            
-            // Tamaño variable para los copos
-            const size = Math.random() * 0.15 + 0.03;
-            
-            snowflake.setAttribute('geometry', {
-              primitive: 'sphere',
-              radius: size
-            });
-            
-            // Opacidad variable para dar sensación de profundidad
-            snowflake.setAttribute('material', {
-              color: 'white',
-              shader: 'flat',
-              transparent: true,
-              opacity: Math.random() * 0.7 + 0.3
-            });
-            
-            snowflake.setAttribute('position', {x: x, y: y, z: z});
-            
-            // Movimiento lateral aleatorio además de caída
-            const driftX = (Math.random() * 2 - 1) * 3;
-            const driftZ = (Math.random() * 2 - 1) * 3;
-            const startY = y;
-            const finalY = -2;
-            
-            // Velocidad variable para cada copo
-            const speed = (Math.random() * 0.5 + 0.5) * data.speed;
-            const duration = (15000 / speed) + (Math.random() * 5000);
-            
-            // Agregar ligero movimiento zigzag
-            snowflake.setAttribute('animation__fall', {
-              property: 'position',
-              from: `${x} ${startY} ${z}`,
-              to: `${x + driftX} ${finalY} ${z + driftZ}`,
-              dur: duration,
-              easing: 'linear',
-              loop: true
-            });
-            
-            // Rotación suave para más realismo
-            snowflake.setAttribute('animation__rotate', {
-              property: 'rotation',
-              from: '0 0 0',
-              to: `${Math.random() * 360} ${Math.random() * 360} ${Math.random() * 360}`,
-              dur: Math.random() * 10000 + 10000,
-              easing: 'linear',
-              loop: true
-            });
-            
-            el.appendChild(snowflake);
-          }
-        }
-      }
-    });
-    
-    // Componente para crear nieve en la cima de las montañas
-    AFRAME.registerComponent('snow-cap', {
-      schema: {
-        radius: {default: 1},
-        height: {default: 2}
-      },
-      
-      init: function() {
-        const data = this.data;
-        const el = this.el;
-        
-        // Obtener posición del cono (montaña)
-        const position = el.getAttribute('position');
-        const height = data.height;
-        
-        // Crear el casquete de nieve
-        const snowCap = document.createElement('a-entity');
-        snowCap.setAttribute('geometry', {
-          primitive: 'cone',
-          radiusBottom: data.radius * 0.75,
-          radiusTop: 0,
-          height: height * 0.6
+        // Componente para la nieve que cae de manera dispersa
+        AFRAME.registerComponent('snow', {
+            schema: {
+                count: { default: 500 },
+                rangeX: { default: 60 },
+                rangeZ: { default: 60 },
+                height: { default: 25 },
+                speed: { default: 2 }
+            },
+
+            init: function () {
+                const data = this.data;
+                const el = this.el;
+
+                // Crear múltiples generadores de nieve para dispersarla
+                for (let j = 0; j < 5; j++) {
+                    const offsetX = (Math.random() * 30) - 15;
+                    const offsetZ = (Math.random() * 30) - 15;
+
+                    for (let i = 0; i < data.count / 5; i++) {
+                        const snowflake = document.createElement('a-entity');
+
+                        // Posición aleatoria con dispersión
+                        const x = (Math.random() * data.rangeX) - (data.rangeX / 2) + offsetX;
+                        const y = (Math.random() * data.height);
+                        const z = (Math.random() * data.rangeZ) - (data.rangeZ / 2) + offsetZ;
+
+                        // Tamaño variable para los copos
+                        const size = Math.random() * 0.15 + 0.03;
+
+                        snowflake.setAttribute('geometry', {
+                            primitive: 'sphere',
+                            radius: size
+                        });
+
+                        // Opacidad variable para dar sensación de profundidad
+                        snowflake.setAttribute('material', {
+                            color: 'white',
+                            shader: 'flat',
+                            transparent: true,
+                            opacity: Math.random() * 0.7 + 0.3
+                        });
+
+                        snowflake.setAttribute('position', { x: x, y: y, z: z });
+
+                        // Movimiento lateral aleatorio además de caída
+                        const driftX = (Math.random() * 2 - 1) * 3;
+                        const driftZ = (Math.random() * 2 - 1) * 3;
+                        const startY = y;
+                        const finalY = -2;
+
+                        // Velocidad variable para cada copo
+                        const speed = (Math.random() * 0.5 + 0.5) * data.speed;
+                        const duration = (15000 / speed) + (Math.random() * 5000);
+
+                        // Agregar ligero movimiento zigzag
+                        snowflake.setAttribute('animation__fall', {
+                            property: 'position',
+                            from: `${x} ${startY} ${z}`,
+                            to: `${x + driftX} ${finalY} ${z + driftZ}`,
+                            dur: duration,
+                            easing: 'linear',
+                            loop: true
+                        });
+
+                        // Rotación suave para más realismo
+                        snowflake.setAttribute('animation__rotate', {
+                            property: 'rotation',
+                            from: '0 0 0',
+                            to: `${Math.random() * 360} ${Math.random() * 360} ${Math.random() * 360}`,
+                            dur: Math.random() * 10000 + 10000,
+                            easing: 'linear',
+                            loop: true
+                        });
+
+                        el.appendChild(snowflake);
+                    }
+                }
+            }
         });
-        
-        snowCap.setAttribute('material', {
-          color: 'gray',
-          shader: 'standard',
-          roughness: 0.8
+
+        // Componente para crear nieve en la cima de las montañas
+        AFRAME.registerComponent('snow-cap', {
+            schema: {
+                radius: { default: 1 },
+                height: { default: 2 }
+            },
+
+            init: function () {
+                const data = this.data;
+                const el = this.el;
+
+                // Obtener posición del cono (montaña)
+                const position = el.getAttribute('position');
+                const height = data.height;
+
+                // Crear el casquete de nieve
+                const snowCap = document.createElement('a-entity');
+                snowCap.setAttribute('geometry', {
+                    primitive: 'cone',
+                    radiusBottom: data.radius * 0.75,
+                    radiusTop: 0,
+                    height: height * 0.6
+                });
+
+                snowCap.setAttribute('material', {
+                    color: 'gray',
+                    shader: 'standard',
+                    roughness: 0.8
+                });
+
+                // Posicionar el casquete de nieve en la cima
+                snowCap.setAttribute('position', {
+                    x: 0,
+                    y: height * 0.15,
+                    z: 0
+                });
+
+                el.appendChild(snowCap);
+            }
         });
-        
-        // Posicionar el casquete de nieve en la cima
-        snowCap.setAttribute('position', {
-          x: 0,
-          y: height * 0.15,
-          z: 0
-        });
-        
-        el.appendChild(snowCap);
-      }
-    });
-  </script>
+    </script>
     <style>
         body {
             margin: 0;
@@ -136,6 +137,7 @@
             width: 100%;
             height: 100%;
         }
+
         .button-container {
             position: fixed;
             bottom: 4vh;
@@ -146,6 +148,7 @@
             z-index: 999;
             flex-wrap: wrap;
         }
+
         .scene-button {
             background: rgba(0, 0, 0, 0.7);
             color: white;
@@ -159,9 +162,11 @@
             text-align: center;
             margin-bottom: 1vh;
         }
+
         .active-button {
             background: rgba(76, 175, 80, 0.8);
         }
+
         .status-indicator {
             position: fixed;
             top: 2vh;
@@ -177,24 +182,26 @@
             max-width: 80vw;
             text-align: center;
         }
-        
+
         /* Media queries para diferentes dispositivos */
         @media (max-width: 480px) {
             .scene-button {
                 padding: 1.5vh 3vw;
             }
+
             .button-container {
                 bottom: 2vh;
                 padding: 0 5px;
                 left: 5px
             }
         }
-        
+
         @media (min-width: 768px) {
             .scene-button {
                 max-width: 200px;
                 font-size: 18px;
             }
+
             .status-indicator {
                 font-size: 16px;
                 max-width: 500px;
@@ -202,18 +209,20 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Indicador de estado -->
     <div id="statusIndicator" class="status-indicator">Buscando marcador...</div>
-    
+
     <!-- Botones para cambiar grupos de imágenes -->
     <div class="button-container">
         <button id="grupo1Button" class="scene-button active-button">Grupo 1</button>
         <button id="grupo2Button" class="scene-button">Grupo 2</button>
     </div>
-    
+
     <!-- Una sola escena A-Frame -->
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix;" vr-mode-ui="enabled: false" renderer="logarithmicDepthBuffer: true;">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix;"
+        vr-mode-ui="enabled: false" renderer="logarithmicDepthBuffer: true;">
         <!-- Definir assets para las imágenes -->
         <a-assets>
             <!-- Reemplaza estas URLs con las URLs de tus imágenes -->
@@ -224,80 +233,86 @@
             <img id="img5" src="99087599.700x525.jpg" alt="Imagen 5">
             <img id="img6" src="99087599.700x525.jpg" alt="Imagen 6">
         </a-assets>
-        
+
         <!-- Un solo marcador con grupos de imágenes -->
         <a-marker id="miMarcador" type="pattern" url="zona1.patt" raycaster="objects: .clickable" emitevents="true">
-<a-entity scale="0.5 0.5 0.5">
-                    <!-- Suelo -->
-    <a-plane 
-  position="0 -2 0" 
-  rotation="-90 0 0" 
-  width="75" 
-  height="75" 
-  color="#fff" 
-  material="roughness: 0.9; opacity: 0.5; transparent: true">
-</a-plane>
+            <a-entity scale="0.5 0.5 0.5">
+                <!-- Suelo -->
+                <a-plane position="0 -2 0" rotation="-90 0 0" width="75" height="75" color="#fff"
+                    material="roughness: 0.9; opacity: 0.5; transparent: true">
+                </a-plane>
 
-    
-    <!-- Montañas -->
-    <a-entity position="-8 -2 -10">
-      <a-cone color="#fff" height="6" radius-bottom="3" radius-top="0" segments-radial="8" snow-cap="radius: 3; height: 6"></a-cone>
-    </a-entity>
-    
-    <a-entity position="-4 -2 -15">
-      <a-cone color="#fff" height="8" radius-bottom="4" radius-top="0" segments-radial="8" snow-cap="radius: 4; height: 8"></a-cone>
-    </a-entity>
-    
-    <a-entity position="3 -2 -18">
-      <a-cone color="#fff" height="10" radius-bottom="5" radius-top="0" segments-radial="8" snow-cap="radius: 5; height: 10"></a-cone>
-    </a-entity>
-    
-    <a-entity position="9 -2 -12">
-      <a-cone color="#fff" height="7" radius-bottom="3.5" radius-top="0" segments-radial="8" snow-cap="radius: 3.5; height: 7"></a-cone>
-    </a-entity>
-    
-    <a-entity position="-1 -2 -20">
-      <a-cone color="#fff" height="9" radius-bottom="4.5" radius-top="0" segments-radial="8" snow-cap="radius: 4.5; height: 9"></a-cone>
-    </a-entity>
-    
-    <!-- Nieve dispersa por toda la escena -->
-    <a-entity position="0 0 0" snow="count: 1000; rangeX: 80; rangeZ: 80; height: 50; speed: 3"></a-entity>
+
+                <!-- Montañas -->
+                <a-entity position="-8 -2 -10">
+                    <a-cone color="#fff" height="6" radius-bottom="3" radius-top="0" segments-radial="8"
+                        snow-cap="radius: 3; height: 6"></a-cone>
+                </a-entity>
+
+                <a-entity position="-4 -2 -15">
+                    <a-cone color="#fff" height="8" radius-bottom="4" radius-top="0" segments-radial="8"
+                        snow-cap="radius: 4; height: 8"></a-cone>
+                </a-entity>
+
+                <a-entity position="3 -2 -18">
+                    <a-cone color="#fff" height="10" radius-bottom="5" radius-top="0" segments-radial="8"
+                        snow-cap="radius: 5; height: 10"></a-cone>
+                </a-entity>
+
+                <a-entity position="9 -2 -12">
+                    <a-cone color="#fff" height="7" radius-bottom="3.5" radius-top="0" segments-radial="8"
+                        snow-cap="radius: 3.5; height: 7"></a-cone>
+                </a-entity>
+
+                <a-entity position="-1 -2 -20">
+                    <a-cone color="#fff" height="9" radius-bottom="4.5" radius-top="0" segments-radial="8"
+                        snow-cap="radius: 4.5; height: 9"></a-cone>
+                </a-entity>
+
+                <!-- Nieve dispersa por toda la escena -->
+                <a-entity position="0 0 0" snow="count: 1000; rangeX: 80; rangeZ: 80; height: 50; speed: 3"></a-entity>
             </a-entity>
             <!-- Grupo 1: 2 Imágenes -->
             <a-entity id="grupo1" visible="true">
                 <!-- Imagen 1-1 -->
-                <a-plane position="-1 0 0" rotation="-90 0 0" width="1.8" height="1.8" material="src: #img1; transparent: true; opacity: 1"></a-plane>
-                
+                <a-plane position="-1 0 0" rotation="-90 0 0" width="1.8" height="1.8"
+                    material="src: #img1; transparent: true; opacity: 1"></a-plane>
+
                 <!-- Imagen 1-2 -->
-                <a-plane position="1 0 0" rotation="-90 0 0" width="1.8" height="1.8" material="src: #img2; transparent: true; opacity: 1"></a-plane>
+                <a-plane position="1 0 0" rotation="-90 0 0" width="1.8" height="1.8"
+                    material="src: #img2; transparent: true; opacity: 1"></a-plane>
             </a-entity>
-            
+
             <!-- Grupo 2: 4 Imágenes -->
             <a-entity id="grupo2" visible="false">
                 <!-- Imagen 2-1 -->
-                <a-plane position="-1 0 -1" rotation="-90 0 0" width="1.5" height="1.5" material="src: #img3; transparent: true; opacity: 1"></a-plane>
-                
+                <a-plane position="-1 0 -1" rotation="-90 0 0" width="1.5" height="1.5"
+                    material="src: #img3; transparent: true; opacity: 1"></a-plane>
+
                 <!-- Imagen 2-2 -->
-                <a-plane position="1 0 -1" rotation="-90 0 0" width="1.5" height="1.5" material="src: #img4; transparent: true; opacity: 1"></a-plane>
-                
+                <a-plane position="1 0 -1" rotation="-90 0 0" width="1.5" height="1.5"
+                    material="src: #img4; transparent: true; opacity: 1"></a-plane>
+
                 <!-- Imagen 2-3 -->
-                <a-plane position="-1 0 1" rotation="-90 0 0" width="1.5" height="1.5" material="src: #img5; transparent: true; opacity: 1"></a-plane>
-                
+                <a-plane position="-1 0 1" rotation="-90 0 0" width="1.5" height="1.5"
+                    material="src: #img5; transparent: true; opacity: 1"></a-plane>
+
                 <!-- Imagen 2-4 -->
-                <a-plane position="1 0 1" rotation="-90 0 0" width="1.5" height="1.5" material="src: #img6; transparent: true; opacity: 1"></a-plane>
+                <a-plane position="1 0 1" rotation="-90 0 0" width="1.5" height="1.5"
+                    material="src: #img6; transparent: true; opacity: 1"></a-plane>
             </a-entity>
-            
+
         </a-marker>
 
 
 
-    <!-- Cámara con cursor -->
-    <a-entity camera></a-entity>
-    <!-- Iluminación -->
-    <!-- <a-light type="ambient" color="#BBB"></a-light> -->
-    <a-light type="directional" color="#FFF" intensity="0.8" position="-1 1 1"></a-light>
+        <!-- Cámara con cursor -->
+        <a-entity camera></a-entity>
+        <!-- Iluminación -->
+        <!-- <a-light type="ambient" color="#BBB"></a-light> -->
+        <a-light type="directional" color="#FFF" intensity="0.8" position="-1 1 1"></a-light>
     </a-scene>
-    
+
     <script>
         // Referencias a elementos DOM
         const statusIndicator = document.getElementById('statusIndicator');
@@ -306,15 +321,15 @@
         const grupo2Button = document.getElementById('grupo2Button');
         const grupo1 = document.getElementById('grupo1');
         const grupo2 = document.getElementById('grupo2');
-        
+
         // Configuración de grupos
         const grupos = [
             { element: grupo1, button: grupo1Button, nombre: 'Grupo 1 (2 imágenes)' },
             { element: grupo2, button: grupo2Button, nombre: 'Grupo 2 (4 imágenes)' }
         ];
-        
+
         let grupoActualIndex = 0;
-        
+
         // Función para cambiar entre grupos
         function cambiarAGrupo(index) {
             // Ocultar todos los grupos
@@ -322,30 +337,30 @@
                 grupo.element.setAttribute('visible', 'false');
                 grupo.button.classList.remove('active-button');
             });
-            
+
             // Mostrar el grupo seleccionado
             grupoActualIndex = index;
             grupos[grupoActualIndex].element.setAttribute('visible', 'true');
             grupos[grupoActualIndex].button.classList.add('active-button');
-            
+
             // Actualizar el indicador
             statusIndicator.textContent = `Mostrando: ${grupos[grupoActualIndex].nombre}`;
         }
-        
+
         // Detectar cuando se encuentra el marcador
         marker.addEventListener('markerFound', () => {
             statusIndicator.textContent = `Marcador detectado - ${grupos[grupoActualIndex].nombre}`;
         });
-        
+
         // Detectar cuando se pierde el marcador
         marker.addEventListener('markerLost', () => {
             statusIndicator.textContent = `Buscando marcador... (${grupos[grupoActualIndex].nombre})`;
         });
-        
+
         // Asignar eventos a los botones
         grupo1Button.addEventListener('click', () => cambiarAGrupo(0));
         grupo2Button.addEventListener('click', () => cambiarAGrupo(1));
-        
+
         // Adaptación dinámica al tamaño de pantalla
         function ajustarInterfaz() {
             // Ajustar altura de botones en dispositivos muy pequeños
@@ -353,7 +368,7 @@
                 document.querySelector('.button-container').style.bottom = '10px';
             }
         }
-        
+
         // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
             // Empezar con el primer grupo
@@ -361,9 +376,10 @@
             // Ajustar interfaz según el tamaño de pantalla
             ajustarInterfaz();
         });
-        
+
         // Reajustar interfaz cuando cambie el tamaño de la ventana
         window.addEventListener('resize', ajustarInterfaz);
     </script>
 </body>
+
 </html>
