@@ -1,92 +1,69 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>AR Fijar Escena</title>
+    <meta charset="utf-8" />
+    <title>Fijar objetos en AR.js</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/1.7.2/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.2.1/aframe/build/aframe-ar.js"></script>
     <style>
-      #statusIndicator {
+      #fijarBtn {
         position: absolute;
-        top: 10px;
-        left: 10px;
-        background-color: white;
-        padding: 8px;
-        font-family: sans-serif;
-        border-radius: 5px;
-        z-index: 100;
-      }
-
-      #fixSceneButton {
-        position: absolute;
-        top: 50px;
-        left: 10px;
-        padding: 10px 15px;
-        font-size: 14px;
-        background-color: #4CAF50;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #ff9800;
         color: white;
         border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 100;
-      }
-
-      #fixSceneButton:hover {
-        background-color: #45a049;
+        border-radius: 8px;
+        z-index: 10;
       }
     </style>
   </head>
-  <body style="margin: 0; overflow: hidden;">
-    <!-- Indicador -->
-    <div id="statusIndicator">Buscando marcador...</div>
-    <button id="fixSceneButton">Fijar Escena</button>
+  <body style="margin: 0; overflow: hidden">
+    <button id="fijarBtn">Fijar Objetos</button>
 
-    <!-- Escena AR -->
     <a-scene embedded arjs="sourceType: webcam;">
-      <a-marker id="miMarcador" type="pattern" url="zona1.patt">
-        <a-entity id="contenidoMarcador">
-          <!-- Lo que aparece sobre el marcador -->
-          <a-box position="0 0.5 0" material="color: red;"></a-box>
-          <a-sphere position="1 0.5 0" material="color: blue;"></a-sphere>
-          <a-cylinder position="-1 0.5 0" material="color: green;"></a-cylinder>
-        </a-entity>
+      <!-- Marcador -->
+      <a-marker id="marker" type="pattern" url="zona1.patt">
+        <a-box position="0 0.5 0" color="red" depth="0.3" height="0.3" width="0.3"></a-box>
+        <a-sphere position="0 1 0" radius="0.2" color="blue"></a-sphere>
       </a-marker>
+
+      <!-- Cámara -->
       <a-entity camera></a-entity>
     </a-scene>
 
-    <!-- Script para manejar la fijación -->
     <script>
-      const status = document.getElementById('statusIndicator');
-      const fixButton = document.getElementById('fixSceneButton');
-      const marker = document.getElementById('miMarcador');
-      let fixed = false;
+      const btn = document.getElementById("fijarBtn");
+      btn.addEventListener("click", () => {
+        const marker = document.querySelector("#marker");
+        const scene = document.querySelector("a-scene");
 
-      marker.addEventListener('markerFound', () => {
-        if (!fixed) status.innerText = 'Marcador detectado';
-      });
+        // Clonamos los hijos del marcador
+        marker.childNodes.forEach((child) => {
+          if (child.tagName && child.tagName.startsWith("A-")) {
+            const clone = child.cloneNode(true);
+            // Convertir la posición del objeto al espacio del mundo (fuera del marcador)
+            const worldPos = new THREE.Vector3();
+            child.object3D.getWorldPosition(worldPos);
 
-      fixButton.addEventListener('click', () => {
-        if (fixed) return;
+            const worldRot = new THREE.Euler();
+            child.object3D.getWorldRotation(worldRot);
 
-        const markerContent = document.getElementById('contenidoMarcador');
-        const clone = markerContent.cloneNode(true);
+            // Asignar posición y rotación en la escena
+            clone.setAttribute("position", `${worldPos.x} ${worldPos.y} ${worldPos.z}`);
+            clone.setAttribute("rotation", {
+              x: THREE.Math.radToDeg(worldRot.x),
+              y: THREE.Math.radToDeg(worldRot.y),
+              z: THREE.Math.radToDeg(worldRot.z),
+            });
 
-        // Obtener posición y rotación del marcador
-        const position = marker.object3D.position.clone();
-        const rotation = marker.object3D.rotation.clone();
-
-        // Asignar posición y rotación al clon
-        clone.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
-        clone.setAttribute('rotation', `${THREE.Math.radToDeg(rotation.x)} ${THREE.Math.radToDeg(rotation.y)} ${THREE.Math.radToDeg(rotation.z)}`);
-
-        // Agregar a la escena
-        document.querySelector('a-scene').appendChild(clone);
-
-        // Ocultar el marcador si querés
-        marker.setAttribute('visible', 'false');
-
-        fixed = true;
-        status.innerText = 'Escena fijada';
+            // Agregarlo directamente a la escena
+            scene.appendChild(clone);
+          }
+        });
       });
     </script>
   </body>
