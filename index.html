@@ -160,10 +160,10 @@
 
 <body>
     <!-- Indicador de estado -->
-    <div id="statusIndicator" class="status-indicator">Buscando marcador...</div>
+    <div id="statusIndicator" class="status-indicator">Buscando...</div>
 
     <!-- Botón para fijar objetos -->
-    <button id="lockButton" class="lock-button">Fijar Objetos</button>
+    <button id="lockButton" class="lock-button">Fijar Escena</button>
 
     <!-- Botones para cambiar escenas -->
     <div class="button-container">
@@ -289,7 +289,7 @@
             if (objetosFijos) {
                 statusIndicator.textContent = `Objetos fijados - ${grupos[index].nombre}`;
             } else {
-                statusIndicator.textContent = `Buscando marcador... (${grupos[index].nombre})`;
+                statusIndicator.textContent = `Buscando ... (${grupos[index].nombre})`;
             }
         }
 
@@ -303,7 +303,7 @@
         // Detectar cuando se pierde el marcador
         marker.addEventListener('markerLost', () => {
             if (!objetosFijos) {
-                statusIndicator.textContent = `Buscando marcador... (${grupos[grupoActualIndex].nombre})`;
+                statusIndicator.textContent = `Buscando ... (${grupos[grupoActualIndex].nombre})`;
             }
         });
 
