@@ -169,7 +169,7 @@
     <div class="button-container">
 <!--         <button id="grupo1Button" class="scene-button active-button">Grupo 1</button> -->
 <!--         <button id="grupo2Button" class="scene-button">Grupo 2</button> -->
-        <button id="grupo3Button" class="scene-button">Grupo 3</button>
+<!--         <button id="grupo3Button" class="scene-button">Grupo 3</button> -->
     </div>
 
     <!-- Controles de navegación -->
@@ -198,29 +198,22 @@
         <!-- Un solo marcador con múltiples grupos de cubos -->
         <a-marker id="miMarcador" type="pattern" url="zona1.patt" raycaster="objects: .clickable" emitevents="true">
 
-            <!-- Grupo 1: Dos cubos (rojo y azul) -->
-             <a-entity id="grupo1" visible="true">
-    <a-plane position="0 0 0" rotation="0 0 0" scale="1 1 1" color="#31e76c" material="" geometry=""></a-plane>
-    <a-plane position="2 0 0" rotation="-45 0 0" scale="1 1 1" color="#7f40be" material="" geometry=""></a-plane>
-    <a-plane position="-2 0 0" rotation="0 45 0" scale="1 1 1" color="#99d1ea" material="" geometry=""></a-plane>
-            </a-entity> 
-
-            <!-- Grupo 2: Tres cubos en formación triangular -->
-             <a-entity id="grupo2" visible="false">
-                <a-box position="0 0.5 0" rotation="0 0 0" scale="0.8 0.8 0.8"
-                    material="color: green; opacity: 0.8"></a-box>
-                <a-box position="1 0.5 1" rotation="0 45 0" scale="0.8 0.8 0.8"
-                    material="color: yellow; opacity: 0.8"></a-box>
-                <a-box position="-1 0.5 1" rotation="0 -45 0" scale="0.8 0.8 0.8"
-                    material="color: purple; opacity: 0.8"></a-box>
-            </a-entity> 
-
             <!-- Fotos -->
-            <a-entity id="grupo3" visible="false">
+             <a-entity id="grupo1" visible="true">
     <a-plane position="2 0 1" rotation="0 -90 0" scale="1 1 1" color="#bd4b53" material="" geometry=""></a-plane>
     <a-plane position="0 0 -1" rotation="0 0 0" scale="1 1 1" color="#b49a4d" material="" geometry=""></a-plane>
     <a-plane position="-2 0 1" rotation="0 90 0" scale="1 1 1" color="#d44198" material="" geometry=""></a-plane>
     <a-plane position="0 0 3" rotation="0 180 0" scale="1 1 1" color="#15ee12" material="" geometry=""></a-plane>
+            </a-entity> 
+
+            <!-- Fotos -->
+             <a-entity id="grupo2" visible="false">
+
+            </a-entity> 
+
+            <!-- Fotos -->
+            <a-entity id="grupo3" visible="false">
+
             </a-entity>
 
         </a-marker>
@@ -259,9 +252,9 @@
 
         // Configuración de grupos
         const grupos = [
-            { element: grupo1, button: grupo1Button, nombre: 'Repuestos' },
-            { element: grupo2, button: grupo2Button, nombre: 'Ropa' },
-            { element: grupo3, button: grupo3Button, nombre: 'Libreria' }
+            { element: grupo1, button: grupo1Button, nombre: 'Fotos' },
+            { element: grupo2, button: grupo2Button, nombre: '' },
+            { element: grupo3, button: grupo3Button, nombre: '' }
         ];
 
         let grupoActualIndex = 0;
