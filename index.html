@@ -200,7 +200,7 @@
 
             <!-- Fotos -->
             <a-entity id="grupo1" visible="true" postiton="0 0 0">
-                <a-entity scale="1.25 1.25 1.25" position="0 -2 -5" >
+                <a-entity scale="1.25 1.25 1.25" position="0 -2 -15" >
                     <a-cone position="0 1 -2" rotation="0 0 0" scale="1.15 1.5 1.1" color="#6b2500" material=""
                         geometry=""></a-cone>
                     <a-cone position="0 1.3 -2" rotation="0 0 0" scale="0.7 1 0.7" color="#e5fdff" material=""
@@ -214,7 +214,8 @@
                     <a-cone position="0 0.9 0" rotation="0 0 0" scale="0.8 1 0.7" color="#e0fbff" material=""
                         geometry=""></a-cone>
                 </a-entity>
-                <a-entity scale="0.5 0.5 0.5" position="0 -2 -5" >
+                
+                <a-entity scale="0.25 0.25 0.25" position="0 -2 -6" rotation="0 -45 0">
                             <!-- Cuerpo principal del vagón de tren -->
         <a-box position="0 1.5 0" width="2.5" height="2.2" depth="6" color="#e67437" shadow
             material="shader: standard; metalness: 0.7; roughness: 0.5; envMapIntensity: 1">
@@ -303,19 +304,15 @@
             <a-cylinder position="0 0.5 2.5" rotation="0 0 90" radius="0.1" height="2.2" color="#555"
                 shadow></a-cylinder>
         </a-entity>
-
-        <!-- Cámara y controles -->
-        <a-entity position="0 2 8">
-            <a-camera wasd-controls="acceleration: 20" look-controls></a-camera>
         </a-entity>
                 </a-entity>    
-                <a-plane position="2 0 1" rotation="0 -90 0" scale="1 1 1" color="#bd4b53" material=""
+                <a-plane position="2 -2 1" rotation="0 -90 0" scale="1 1 1" color="#bd4b53" material=""
                     geometry=""></a-plane>
-                <a-plane position="0 0 -1" rotation="0 0 0" scale="1 1 1" color="#b49a4d" material=""
+                <a-plane position="0 -2 -1" rotation="0 0 0" scale="1 1 1" color="#b49a4d" material=""
                     geometry=""></a-plane>
-                <a-plane position="-2 0 1" rotation="0 90 0" scale="1 1 1" color="#d44198" material=""
+                <a-plane position="-2 -2 1" rotation="0 90 0" scale="1 1 1" color="#d44198" material=""
                     geometry=""></a-plane>
-                <a-plane position="0 0 3" rotation="0 180 0" scale="1 1 1" color="#15ee12" material=""
+                <a-plane position="0 -2 3" rotation="0 180 0" scale="1 1 1" color="#15ee12" material=""
                     geometry=""></a-plane>
             </a-entity>
 
