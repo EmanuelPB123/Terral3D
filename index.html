@@ -202,7 +202,7 @@
             <a-entity id="grupo1" visible="true" postiton="0 0 0">
 
                     <!-- Avión -->
-    <a-entity id="avion" avion-circular>
+    <a-entity id="avion" avion-circular scale="0.2 0.2 0.2">
       <!-- Fuselaje -->
       <a-box color="white" width="3" height="0.7" depth="1"></a-box>
       
@@ -229,7 +229,7 @@
     </a-entity>
 
                 <!-- vagon -->
-                <a-entity scale="0.4 0.4 0.4" position="-6 -2 0" rotation="0 -45 0">
+                <a-entity scale="0.1 0.1 0.1" position="-6 -2 0" rotation="0 -45 0">
                     <!-- Cuerpo principal del vagón de tren -->
                     <a-box position="0 1.5 0" width="2.5" height="2.2" depth="6" color="#e67437" shadow
                         material="shader: standard; metalness: 0.7; roughness: 0.5; envMapIntensity: 1">
@@ -621,6 +621,48 @@
             cambiarAGrupo(0);
         });
     </script>
+    <script>
+    // Componente personalizado para animar el avión en círculo
+    AFRAME.registerComponent('avion-circular', {
+      init: function() {
+        this.angle = 0;
+        this.radius = 50; // Radio del círculo
+        this.height = 5; // Altura base
+      },
+      
+      tick: function (time, timeDelta) {
+        // Calculamos el ángulo basado en el tiempo
+        this.angle += 0.005;
+        
+        // Calculamos la posición en un círculo
+        let x = this.radius * Math.cos(this.angle);
+        let z = this.radius * Math.sin(this.angle);
+        let y = this.height + Math.sin(this.angle * 2) * 0.5; // Pequeño movimiento arriba/abajo
+        
+        // Aplicamos la posición
+        this.el.setAttribute('position', {x: x, y: y, z: z});
+        
+        // Calculamos la rotación para que siempre mire hacia adelante
+        // En un círculo, la tangente es perpendicular al radio
+        let rotY = (Math.atan2(x, z) * 180 / Math.PI) + 180;
+        
+        // Aplicamos la rotación - el eje Y controla la dirección de "mirar"
+        this.el.setAttribute('rotation', {
+          x: 0, 
+          y: rotY, 
+          z: Math.sin(this.angle * 2) * 10 // Pequeña inclinación lateral
+        });
+      }
+    });
+
+    // Componente para girar la hélice
+    AFRAME.registerComponent('girar-helice', {
+      tick: function (time) {
+        // Velocidad de rotación más rápida para la hélice
+        this.el.setAttribute('rotation', {x: time * 50 % 360, y: 0, z: 0});
+      }
+    });
+  </script>
 </body>
 
 </html>
