@@ -201,7 +201,32 @@
             <!-- Fotos -->
             <a-entity id="grupo1" visible="true" postiton="0 0 0">
 
-                <!-- montain -->
+                    <!-- Avión -->
+    <a-entity id="avion" avion-circular>
+      <!-- Fuselaje -->
+      <a-box color="white" width="3" height="0.7" depth="1"></a-box>
+      
+      <!-- Nariz -->
+      <a-cone color="red" position="1.65 0 0" rotation="0 0 -90" radius-bottom="0.35" radius-top="0" height="1"></a-cone>
+      
+      <!-- Alas -->
+      <a-box color="white" position="0 0 0" width="1.5" height="0.1" depth="6"></a-box>
+      
+      <!-- Cola vertical -->
+      <a-box color="white" position="-1.4 0.75 0" width="0.7" height="1" depth="0.1"></a-box>
+      
+      <!-- Cola horizontal -->
+      <a-box color="white" position="-1.4 0.3 0" width="0.7" height="0.1" depth="2"></a-box>
+      
+      <!-- Cabina -->
+      <a-box color="blue" position="0.2 0.5 0" width="1.3" height="0.5" depth="0.5"></a-box>
+      
+      <!-- Hélice -->
+      <a-entity position="1.75 0 0" girar-helice>
+        <a-box color="black" position="0.1 0 0" width="0.1" height="0.1" depth="1.5"></a-box>
+        <a-box color="black" position="0 0 0" width="0.1" height="1.5" depth="0.1"></a-box>
+      </a-entity>
+    </a-entity>
 
                 <!-- vagon -->
                 <a-entity scale="0.4 0.4 0.4" position="-6 -2 0" rotation="0 -45 0">
